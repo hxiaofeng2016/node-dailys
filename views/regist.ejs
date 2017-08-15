@@ -1,0 +1,79 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="format-detection" content="telephone=no"/>
+		<title>悠派智能日报系统-注册</title>
+		<link href="css/common.css" rel="stylesheet" type="text/css" />
+		<link href="css/login.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/common.js"></script>
+	</head>
+	<body >
+		<div class="login registra">
+			<div class="message">悠派智能日报系统 - 注册</div>
+			<form>
+				<p><span>账号：</span><input id="user" name="user" placeholder="输入账号" required="required" type="text"></p>
+				<p><span>密码：</span><input id="password" name="password" placeholder="输入密码" required="required" type="password"></p>
+				<p><span>密码：</span><input id="passwords" name="passwords" placeholder="输入确认密码" required="required" type="password"></p>
+				<p>
+					<span>性别：</span>
+					<label for="boy">男</label>
+					<input type="radio" name="sex" id="boy" value="boy" checked="checked">
+					<label for="girl">女</label>
+					<input type="radio" name="sex" id="girl" value="girl">
+				</p>
+				<p>
+					<span>部门：</span>
+					<select id="department" name="department">
+					  <option value ="o2o">o2o</option>
+					  <option value ="p2p">p2p</option>
+					</select>
+				</p>
+				<p><span>姓名：</span><input id="name" name="name" placeholder="输入真实姓名" required="required" type="text"></p>
+				<div class="tips_button"><a href="/login">已有账号？直接登录</a></div>
+				<p><input value="注册" type="button" id="regist_button"></p>
+			</form>
+		</div>
+
+		<script>
+			$("#regist_button").on("click", function(){
+				var user = $("#user").val();
+				var password = $("#password").val();
+				var passwords = $("#passwords").val();
+				var sex = $("input[type='radio']:checked").val();
+				var department = $("#department").find("option:selected").text();
+				var name = $("#name").val();
+
+				if(user.length<1){
+					return alert("请输入账号！");
+				}
+				if(passwords.length<1){
+					return alert("请输入密码！");
+				}
+				if(passwords != password){
+					return alert("密码不一致！");
+				}
+				if(name.length<1){
+					return alert("请输入真实姓名！");
+				}
+				$.post("/doregist",{
+					"user" : user,
+					"password" : password,
+					"name" : name,
+					"sex" : sex,
+					"department" : department
+				},function(result){
+					if(result == "1"){
+						//注册成功
+						alert("注册成功！将自动跳转到首页");
+						window.location = "/";
+					}else if(result == "-1"){
+						alert("用户名已被占用!");
+					}
+				});
+			});
+		</script>
+	</body>
+</html>

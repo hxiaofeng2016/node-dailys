@@ -1,0 +1,60 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="format-detection" content="telephone=no"/>
+		<title>欢迎-悠派智能日报系统</title>
+		<link href="css/common.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/common.js"></script>
+	</head>
+	<body >
+
+		<% include header.ejs %>
+
+		<div class="page_box">
+
+			<% include sliderbar_left.ejs %>
+
+			<div class="page_main">
+				<div class="write_box">
+					<p>【日期】<time id="time"></time></p>
+					<p>【日报】<%if(students.flag > 0){%> 你今天写过日报啦 再写就是更新日报~ <%}%> </p>
+					<div>
+						<textarea id="daily_inner" name="" id="" placeholder="请填写今天的工作日报~"></textarea>
+						<input value="发布日报" type="button" id="add_daily">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			var Date = new Date();
+			$("#time").text(Date.toLocaleDateString());
+
+			$("#add_daily").on("click", function(){
+				var time = Date.toLocaleDateString();
+				var inner = $("#daily_inner").val();
+				if($("#time").text() != time){
+					return alert("调皮！还手动修改时间呢！");
+				}
+
+				$.post("/dodailys",{
+					"time" : time,
+					"inner" : inner
+				},function(result){
+					if(result == "1"){ // 登录成功
+						alert("添加日报成功！")
+					}else if(result == "2"){
+						alert("修改成功！");
+					}else if(result == "-2"){
+						alert("添加失败，请稍后再试！");
+					}else if(result == "-3"){
+						alert("系统错误，请稍后再试！");
+					}
+				});
+			});
+		</script>
+	</body>
+</html>

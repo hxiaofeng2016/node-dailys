@@ -1,0 +1,40 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="format-detection" content="telephone=no"/>
+		<title>欢迎-悠派智能日报系统</title>
+		<link href="css/common.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/common.js"></script>
+	</head>
+	<body >
+
+		<% include header.ejs %>
+
+		<div class="page_box">
+
+			<% include sliderbar_left.ejs %>
+
+			<div class="page_main">
+				<div class="daily_list">
+					<%if(dailys.length<1){%>
+						<div class="nullinner">新来的？怎么没有你的足迹！快去写日报！</div>
+					<%}%>
+					<ul>
+						<%for(var i = 0 ;i < dailys.length ; i++){%>
+						<li>
+							<time>【日期】<%=dailys[i].time%></time>
+							<div class="daily">
+								<p>【部门】<%=dailys[i].department%></p>
+								<p><%=dailys[i].inner%></p>
+							</div>
+						</li>
+						<%}%>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

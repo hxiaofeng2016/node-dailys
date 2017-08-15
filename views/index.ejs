@@ -1,0 +1,45 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="format-detection" content="telephone=no"/>
+		<title>欢迎-悠派智能日报系统</title>
+		<link href="css/common.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/common.js"></script>
+	</head>
+	<body >
+	<% include header.ejs %>
+
+	<div class="page_box">
+
+		<% include sliderbar_left.ejs %>
+
+		<div class="page_main">
+			<div class="today">
+				<%if(students.flag == 1){%><p>【日报】 你今天写过日报啦 <a href="/write">去更新</a></p><%}%>
+				<%if(students.flag == 0){%><p>【日报】 你今天还没有写日报~ <a href="/write">马上写</a></p><%}%>
+			</div>
+			<div class="daily_list">
+				<div class="ty_tisp">近一周日报:</div>
+				<ul>
+					<%if(dailys.length<1){%>
+						<div class="nullinner">你最近没有写日报哦！去写篇日报吧~</div>
+					<%}%>
+					<%for(var i = 0 ;i < dailys.length ; i++){%>
+						<%if(i<6){%>
+						<li>
+							<time>【日期】<%=dailys[i].time%></time>
+							<div class="daily">
+								<%=dailys[i].inner%>
+							</div>
+						</li>
+						<%}%>
+					<%}%>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</body>
+</html>

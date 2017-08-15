@@ -1,0 +1,57 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="format-detection" content="telephone=no"/>
+		<title>欢迎-悠派智能日报系统</title>
+		<link href="css/common.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/common.js"></script>
+	</head>
+	<body >
+
+		<% include header.ejs %>
+
+		<div class="page_box">
+
+			<% include sliderbar_left.ejs %>
+
+			<div class="page_main">
+				<div class="today">
+					<p class="tips">你现在看到的是 <span></span> 号组员的日报~<a href="JavaScript:;" class="all_daily">查看全部</a></p>
+				</div>
+				<div class="daily_list">
+					<%if(dailys.length<1){%>
+						<div class="nullinner">你组员今天没有写日报哦！快去催催！</div>
+					<%}%>
+					<ul></ul>
+				</div>
+			</div>
+		</div>
+		<script>
+			var Date = new Date();
+			var time = Date.toLocaleDateString();
+			$(".tips span").text(time);
+			$(".all_daily").on("click", function(){
+				getAlldaily("all")
+			});
+			getAlldaily(time)
+			function getAlldaily(time){
+				var str = "";
+				$.post("/doAllDailys",{
+					"time" : time
+				},function(result){
+					$(".daily_list ul").html("");
+					for(var i = 0 ; i < result.length; i++){
+						var dailys = result[i];
+						str += "<li> <time>【组员】"+ dailys.name +"【日期】"+ dailys.time +" </time>" +
+								"<div class=daily><p>【部门】"+ dailys.department +"</p>" +
+								"<p>"+ dailys.inner +"</p> </div></li>";
+					}
+					$(".daily_list ul").html(str);
+				});
+			}
+		</script>
+	</body>
+</html>
