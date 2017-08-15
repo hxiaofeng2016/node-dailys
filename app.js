@@ -11,7 +11,6 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
 //Ä£°åÒıÇæ
 app.set("view engine","ejs");
 //¾²Ì¬Ò³Ãæ

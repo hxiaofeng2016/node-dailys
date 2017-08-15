@@ -2,6 +2,18 @@ var Student = require("../models/Student.js");
 var Daily = require("../models/Daily.js");
 var md5 = require("../models/md5.js");
 var formidable = require("formidable");
+//每天凌晨刷新日报flag
+var date = new Date();
+var oldDate = date;
+var idInt = setInterval(function(){
+    var date = new Date();
+    var newDate = date;
+    if(newDate>oldDate){
+        oldDate = newDate;
+        exports.setFlag();
+    }
+},60000);//每分钟检索一次
+
 
 //显示路由 ↓
 //显示首页
@@ -196,6 +208,15 @@ exports.doDailys = function(req,res,next){
                 });
             }
         });
+    });
+}
+
+//设置日报状态
+exports.setFlag = function(req,res,next){
+    Student.update({},{"flag":0}, { multi: true },function(err, result){
+        if (err) {
+            return err; //服务器错误
+        }
     });
 }
 
