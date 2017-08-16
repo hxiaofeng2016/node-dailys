@@ -1,22 +1,29 @@
-# node-dailys
-日报系统 技术栈：(express + express-session + formidable + mongodb + mongoose) 
+# Dailys简介
 
-示例：
+> Dailys系统是 基于Node.js 平台开发的，使用的技术栈 为：
+> express + express-session + formidable + mongodb + mongoose
+> 功能：组员注册账号，填写日报， 管理员可查看当天/全部组员的日报
 
-  安装mongoDB 并运行 (mongod --dbpath "xxx")
-  可视化工具 推荐："MongoDB Compass"
-  
-  安装相关模块node_modules
-  npm install
-  
-  修改数据库连接
-  文件：models/db.js
-  
-  运行项目
-  node app.js
-  
-  备注：
+安装mongoDB 并运行 （可视化工具 推荐："MongoDB Compass"）
 
-  用户默认power(权限)为1;
+``` JavaScript
+mongod --dbpath "xxx"
+```
 
-  本地运行后 修改用户的power 大于1 可看到全部人员的日报
+安装相关模块node_modules
+
+``` JavaScript
+ npm install
+```
+
+ 修改数据库连接 文件路径：
+
+``` JavaScript
+ models/db.js
+```
+
+ 运行项目
+
+``` JavaScript
+ node app.js
+```
