@@ -4,16 +4,16 @@ var md5 = require("../models/md5.js");
 var formidable = require("formidable");
 //每天凌晨刷新日报flag
 var date = new Date();
-var oldDate = date;
+var oldDate = date.getFullYear() + "" + date.getMonth() + "" + date.getDate();
 var idInt = setInterval(function(){
     var date = new Date();
-    var newDate = date;
+    var newDate = date.getFullYear() + "" + date.getMonth() + "" + date.getDate();
     if(newDate>oldDate){
         oldDate = newDate;
         exports.setFlag();
     }
 },60000);//每分钟检索一次
-
+console.log(oldDate)
 
 //显示路由 ↓
 //显示首页
@@ -257,12 +257,12 @@ exports.doAllDailys = function(req,res,next){
     form.parse(req, function (err, fields, files) {
         Student.findOne({"user": user}, function (err, result) {
             if(fields.time == "all"){
-                Daily.find({},function(err,result2){
+                Daily.find({}, null, {"sort": {"time" : "-1"}},function(err,result2){
                     return res.send(result2);  //密码错误
                 });
             }else{
-                Daily.find({"time":fields.time},function(err,result2){
-                    return res.send(result2);  //密码错误
+                Daily.find({"time":fields.time},function(err,result){
+                    return res.send(result);  //密码错误
                 });
             }
         });
