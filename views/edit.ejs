@@ -52,14 +52,15 @@
 				var sex = $("input[type='radio']:checked").val();
 				var department = $("#department").find("option:selected").text();
 				var name = $("#name").val();
+				if(user == "admin"){
+					return alert("管理员不能改密码！");
+				}
 				if(password.length<1){
 					return alert("请输入密码！");
 				}
-
 				if(password == newpwd){
 					return alert("原始密码和新密码不能一致！");
 				}
-
 				$.post("/doedit",{
 					"user" : user,
 					"password" : password,

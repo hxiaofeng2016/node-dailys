@@ -3,17 +3,14 @@ var Daily = require("../models/Daily.js");
 var md5 = require("../models/md5.js");
 var formidable = require("formidable");
 //每天凌晨刷新日报flag
-var date = new Date();
-var oldDate = date.getFullYear() + "" + date.getMonth() + "" + date.getDate();
+var oldDate = getDate();
 var idInt = setInterval(function(){
-    var date = new Date();
-    var newDate = date.getFullYear() + "" + date.getMonth() + "" + date.getDate();
+    var newDate = getDate();
     if(newDate>oldDate){
         oldDate = newDate;
         exports.setFlag();
     }
 },60000);//每分钟检索一次
-console.log(oldDate)
 
 //显示路由 ↓
 //显示首页
@@ -23,7 +20,7 @@ exports.showIndex = function(req,res,next){
     }
     var user = req.session.user;
     Student.findOne({"user": user}, function (err, result) {
-        Daily.find({"students":user},function(err,result2){
+        Daily.find({"students":user}, null, {"sort": {"time" : "-1"}},function(err,result2){
             res.render("index", {
                 "students": result,
                 "dailys" : result2
@@ -55,9 +52,14 @@ exports.showWrite = function(req,res,next){
         return res.redirect('/login');
     }
     var user = req.session.user;
+    var time = getDate();
     Student.findOne({"user": user}, function (err, result) {
-        res.render("write", {
-            "students": result
+        Daily.findOne({"students": user,"time": time},function(err, result2){
+            res.render("write", {
+                "students": result,
+                "dailys": result2
+            });
+            return false;
         });
     });
 };
@@ -83,9 +85,17 @@ exports.showAll = function(req,res,next){
         return res.redirect('/login');
     }
     var user = req.session.user;
+    var time = getDate();
     Student.findOne({"user": user}, function (err, result) {
-        if(result.power > 1){
-            Daily.find({"department":result.department},function(err,result2){
+        if(result.power == 9){
+            Daily.find({"time":time},function(err,result2){
+                res.render("alldailys", {
+                    "students": result,
+                    "dailys" : result2
+                });
+            });
+        }else if(result.power == 2){
+            Daily.find({"time":time,"department":result.department},function(err,result2){
                 res.render("alldailys", {
                     "students": result,
                     "dailys" : result2
@@ -94,7 +104,6 @@ exports.showAll = function(req,res,next){
         }else{
             return res.redirect('/index');
         }
-
     });
 };
 //显示修改资料页
@@ -110,6 +119,18 @@ exports.showEdit = function(req,res,next){
         }
         res.render("edit", {
             "students": result
+        });
+    });
+};
+
+//生成日报页面
+exports.userDailys = function(req,res,next){
+    var user = "admin";
+    var time = getDate();
+    Daily.find({"time":time},function(err,result){
+        console.log(result)
+        res.render("userdailys", {
+            "dailys" : result
         });
     });
 };
@@ -179,11 +200,12 @@ exports.doRegist = function(req,res,next){
 exports.doDailys = function(req,res,next){
     var user = req.session.user;
     var form = new formidable.IncomingForm();
+    var time = getDate();
     form.parse(req, function (err, fields, files) {
         Student.findOne({"user": user}, function (err, result) {
             var json = {
                 "user_id" : result._id,
-                "time" : fields.time,
+                "time" : time,
                 "inner" : fields.inner,
                 "students" :result.user,
                 "name" :result.name,
@@ -199,7 +221,7 @@ exports.doDailys = function(req,res,next){
                     });
                 });
             }else{
-                Daily.update({"user_id": json.user_id,"time": json.time},{"inner":json.inner},{multi: true},function(err, result2){
+                Daily.update({"user_id": json.user_id,"time": time},{"inner":json.inner},{multi: true},function(err, result2){
                     if (err) {
                         return res.send("-3"); //服务器错误
                     }
@@ -254,17 +276,51 @@ exports.doEdit = function(req,res,next) {
 exports.doAllDailys = function(req,res,next){
     var user = req.session.user;
     var form = new formidable.IncomingForm();
+    if (req.session.login != "1") {
+        return res.redirect('/login');
+    }
     form.parse(req, function (err, fields, files) {
         Student.findOne({"user": user}, function (err, result) {
             if(fields.time == "all"){
-                Daily.find({}, null, {"sort": {"time" : "-1"}},function(err,result2){
-                    return res.send(result2);  //密码错误
-                });
+                if(result.power == 9){
+                    Daily.find({}, null, {"sort": {"time" : "-1"}},function(err,result2){
+                        return res.send(result2);  //返回全部日报
+                    });
+                }else if(result.power == 2){
+                    Daily.find({"department":result.department}, null, {"sort": {"time" : "-1"}},function(err,result2){
+                        return res.send(result2);  //返回全部日报
+                    });
+                }else{
+                    return res.send("-1");  //系统异常
+                }
             }else{
-                Daily.find({"time":fields.time},function(err,result){
-                    return res.send(result);  //密码错误
-                });
+                if(result.power == 9){
+                    Daily.find({"time" : fields.time}, null, {"sort": {"time" : "-1"}},function(err,result2){
+                        return res.send(result2);  //返回当天全部日报
+                    });
+                }else if(result.power == 2){
+                    Daily.find({"time" : fields.time ,"department":result.department}, null, {"sort": {"time" : "-1"}},function(err,result2){
+                        return res.send(result2);  //返回当天组员日报
+                    });
+                }else{
+                    return res.send("-1");  //系统异常
+                }
             }
         });
     });
+};
+
+//计算日期
+function getDate(){
+    var date = new Date();
+    this.Y = date.getFullYear();
+    this.M = date.getMonth()+1 ;
+    this.D = date.getDate();
+    if(this.M < 10){
+        this.M =  0 +"" + this.M;
+    }
+    if(this.D < 10){
+        this.D =  0 +"" + this.D;
+    }
+    return this.Y + "-" + this.M + "-" + this.D;
 }

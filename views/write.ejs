@@ -20,39 +20,50 @@
 			<div class="page_main">
 				<div class="write_box">
 					<p>【日期】<time id="time"></time></p>
-					<p>【日报】<%if(students.flag > 0){%> 你今天写过日报啦 再写就是更新日报~ <%}%> </p>
+					<p>【日报】<%if(students.flag > 0){%> 你今天写过日报了，需要修改可以点更新按钮 <%}%> </p>
 					<div>
-						<textarea id="daily_inner" name="" id="" placeholder="请填写今天的工作日报~"></textarea>
-						<input value="发布日报" type="button" id="add_daily">
+						<textarea id="daily_inner" name="" placeholder="请填写今天的工作日报~" ><%if(dailys){%><%-dailys.inner -%><%}%></textarea>
+						<%if(dailys){%>
+							<input value="更新今天日报" type="button" id="add_daily">
+						<%} else{%>
+							<input value="发布今天日报" type="button" id="add_daily">
+						<%}%>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<script>
-			var Date = new Date();
-			$("#time").text(Date.toLocaleDateString());
-
-			$("#add_daily").on("click", function(){
-				var time = Date.toLocaleDateString();
-				var inner = $("#daily_inner").val();
-				if($("#time").text() != time){
-					return alert("调皮！还手动修改时间呢！");
+			$(function(){
+				$("#time").text(getDate());
+				var val = $("#daily_inner").val();
+				if(val.length>0){
+					var reg = new RegExp("<br>","g"); //创建正则RegExp对象
+					var newstr= val.replace(reg,"\n");
+					$("#daily_inner").val(newstr );
 				}
 
-				$.post("/dodailys",{
-					"time" : time,
-					"inner" : inner
-				},function(result){
-					if(result == "1"){ // 登录成功
-						alert("添加日报成功！")
-					}else if(result == "2"){
-						alert("修改成功！");
-					}else if(result == "-2"){
-						alert("添加失败，请稍后再试！");
-					}else if(result == "-3"){
-						alert("系统错误，请稍后再试！");
+				$("#add_daily").on("click", function(){
+					var str = $("#daily_inner").val();
+					var reg=new RegExp("<br>","g"); //创建正则RegExp对象
+					var newstr =str.replace(/\n|\r\n/g,"<br>");
+					console.log(newstr)
+					if($("#time").text() != getDate()){
+						return alert("调皮！还手动修改时间呢！");
 					}
+					$.post("/dodailys",{
+						"inner" : newstr
+					},function(result){
+						if(result == "1"){ // 登录成功
+							alert("添加日报成功！")
+						}else if(result == "2"){
+							alert("修改成功！");
+						}else if(result == "-2"){
+							alert("添加失败，请稍后再试！");
+						}else if(result == "-3"){
+							alert("系统错误，请稍后再试！");
+						}
+					});
 				});
 			});
 		</script>

@@ -17,21 +17,22 @@ app.set("view engine","ejs");
 app.use(express.static("./public"));
 
 //显示
-app.get("/",router.showIndex);
-app.get("/index",router.showIndex);
-app.get("/login",router.showLogin);
-app.get("/onlogin",router.showOnLogin);
-app.get("/regist",router.showRegist);
-app.get("/write",router.showWrite);
-app.get("/dailys",router.showDailys);
-app.get("/edit",router.showEdit);
-app.get("/alldailys",router.showAll);
+app.get("/",router.showIndex);//显示首页
+app.get("/index",router.showIndex); //显示首页
+app.get("/login",router.showLogin); //显示登录页面
+app.get("/onlogin",router.showOnLogin); // 退出账号业务
+app.get("/regist",router.showRegist); // 显示注册页面
+app.get("/write",router.showWrite); //显示 写日报 页面
+app.get("/dailys",router.showDailys); //显示用户个人日报记录
+app.get("/edit",router.showEdit); //显示编辑个人资料
+app.get("/alldailys",router.showAll); //显示当天组员日报
+app.get("/userdailys",router.userDailys); // 生成日报页面
 
 //业务
-app.post("/dologin",router.doLogin);
-app.post("/doregist",router.doRegist);
-app.post("/doedit",router.doEdit);
-app.post("/dodailys",router.doDailys);
-app.post("/doalldailys",router.doAllDailys);
+app.post("/dologin",router.doLogin); //执行登录业务
+app.post("/doregist",router.doRegist);//执行注册业务
+app.post("/doedit",router.doEdit);//执行修改资料业务
+app.post("/dodailys",router.doDailys);//执行写日报业务
+app.post("/doalldailys",router.doAllDailys);//执行检索全部日报业务
 
 app.listen(3000);

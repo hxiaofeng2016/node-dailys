@@ -17,7 +17,7 @@
 		<% include sliderbar_left.ejs %>
 
 		<div class="page_main">
-			<div class="today">
+			<div class="day_time">
 				<%if(students.flag == 1){%><p>【日报】 你今天写过日报啦 <a href="/write">去更新</a></p><%}%>
 				<%if(students.flag == 0){%><p>【日报】 你今天还没有写日报~ <a href="/write">马上写</a></p><%}%>
 			</div>
@@ -32,7 +32,7 @@
 						<li>
 							<time>【日期】<%=dailys[i].time%></time>
 							<div class="daily">
-								<%=dailys[i].inner%>
+								<%-dailys[i].inner%>
 							</div>
 						</li>
 						<%}%>

@@ -15,5 +15,18 @@ $(function(){
     } else{
         leftnav.eq(0).addClass('active');
     }
-
+    //º∆À„»’∆⁄
+    getDate = window.getDate = function(){
+        var date = new Date();
+        this.Y = date.getFullYear();
+        this.M = date.getMonth()+1 ;
+        this.D = date.getDate();
+        if(this.M < 10){
+            this.M =  0 +"" + this.M;
+        }
+        if(this.D < 10){
+            this.D =  0 +"" + this.D;
+        }
+        return this.Y + "-" + this.M + "-" + this.D;
+    }
 });

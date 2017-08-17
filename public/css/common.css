@@ -55,6 +55,7 @@ body{
 	font: 14px/1.4 Microsoft YaHei,SimSun,Arial;
 }
 *{
+	word-wrap:break-word;
 	/*box-sizing: border-box;*/
 	/*-webkit-user-select:none;*/
 	-webkit-tap-highlight-color:rgba(0, 0, 0, 0);
@@ -127,22 +128,47 @@ body{
 .page_box {
 	padding: 60px 0 0 220px;
 }
-.today{
+.day_time{
 	padding: 0 0 0 20px;
 	font-size: 16px;
 }
-.today a{
-	display: inline-block;
-	width: 100px;
-	height: 40px;
-	border-radius: 5px;
-	margin-left: 20px;
+.day_time .day_title{
 	text-align: center;
-	line-height: 40px;
+	font-size: 20px;
+}
+
+.choose_date{
+	line-height: 28px;
+	padding-bottom: 20px;
+}
+.choose_date input{
+	height: 28px;
+	padding-left: 10px;
+	border: 1px solid #ccc;
+	width: 150px;
+	border-radius: 3px;
+}
+.flatpickr-calendar .flatpickr-month{
+	height: 34px;
+}
+.flatpickr-prev-month, .flatpickr-next-month{
+	background: #fff;
+}
+.day_time a{
+	display: inline-block;
+	width: 80px;
+	height: 32px;
+	border-radius: 5px;
+	position: relative;
+	top: 2px;
+	margin: 0 10px;
+	font-size: 16px;
+	text-align: center;
+	line-height: 32px;
 	color:#fff;
 	background-color: #27A9E3;
 }
-.today a:hover{
+.day_time a:hover{
 	opacity: 0.7;
 }
 .daily_list{
@@ -190,7 +216,8 @@ body{
 	height: 350px;
 	padding: 10px;
 	border-radius: 5px;
-	font-size: 14px;
+	color: #777;
+	font: 14px/1.4 Microsoft YaHei,SimSun,Arial;
 	margin-bottom: 20px;
 	box-shadow: 1px 2px 3px #ccc;
 }
@@ -239,6 +266,30 @@ body{
 	font-size: 16px;
 }
 
+.uese_box h3{
+	text-align: center;
+	font-size: 24px;
+	line-height: 3;
+}
+
+.user_list{
+	padding: 0 20%;
+	color:#000;
+	width: 500px;
+	margin: 0 auto;
+}
+.user_list .user_name{
+	font-size: 18px;
+	line-height: 2.4;
+}
+.user_list .user_inner{
+	opacity: 0.6;
+	font-size: 18px;
+	padding-left: 2em;
+}
+.user_list > div{
+	margin-bottom: 10px;
+}
 @media screen and (max-width: 500px) {
 	.page_box{
 		padding-left: 0;
@@ -258,6 +309,14 @@ body{
 		font-size: 14px;
 		height: 40px;
 		text-indent: 20px;
+	}
+
+	.user_list{
+		width: 100%;
+		padding: 0;
+	}
+	.user_list > div{
+		padding-left: 20px;
 	}
 	.page_main{
 		padding: 0;
