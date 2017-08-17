@@ -3,6 +3,8 @@
 > Dailys系统是 基于Node.js 平台开发的，使用的技术栈 为：
 ### express + express-session + formidable + mongodb + mongoose
 > 功能：组员注册账号，填写日报， 管理员可查看当天/全部组员的日报
+> 用户power(权限)为2 只能看到自己分组同类的组员日报
+> 用户power(权限)为9 可以看到全部组员的日报
 
 安装mongoDB 并运行 （可视化工具 推荐："MongoDB Compass"）
 
