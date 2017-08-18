@@ -62,8 +62,11 @@
 				});
 				$(".date_daily").on("click", function(){
 					var setDate = $("#flatpickr-tryme").val();
-					getAlldaily(setDate)
-					$(".tips span").text(setDate);
+					if(setDate!=""){
+						getAlldaily(setDate)
+						$(".tips span").text(setDate);
+					}
+
 				});
 	//			getAlldaily(time)
 				function getAlldaily(time){
@@ -82,9 +85,11 @@
 										"<div class=daily><p>【部门】"+ dailys.department +"</p>" +
 										"<p>"+ dailys.inner +"</p> </div></li>";
 							}
-							Dom.html(str);
+							var reg = new RegExp("&lt;br&gt;","g"); //创建正则RegExp对象
+							var Newstr= str.replace(reg,"<br/>");
+							Dom.html(Newstr);
 						}else{
-							alert("系统异常，请稍后再试！")
+							$(".daily_list").append("<div class=nullinner>系统异常，请稍后再试！</div>");
 						}
 						if(result.length == 0 ){
 							$(".daily_list").append("<div class=nullinner>没有日报内容！</div>");

@@ -173,6 +173,9 @@ exports.doRegist = function(req,res,next){
             if (result) {
                 return res.send("-1"); //被占用
             }
+            if (fields.department != "o2o") {
+                return res.send("-2"); //邀请码无效
+            }
             var password = md5(md5(fields.password) + "daily");
             Student.create({
                 "user" : user,
@@ -183,9 +186,6 @@ exports.doRegist = function(req,res,next){
                 "flag" : 0,
                 "department" : fields.department
             },function(err, result){
-                if (err) {
-                    return res.send("-3"); //服务器错误
-                }
                 req.session.login = "1";
                 req.session.user = user;
                 return res.send("1"); //注册成功，写入session

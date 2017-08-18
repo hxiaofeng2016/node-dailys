@@ -14,7 +14,7 @@
 		<div class="login registra">
 			<div class="message">悠派智能日报系统 - 注册</div>
 			<form>
-				<p><span>账号：</span><input id="user" name="user" placeholder="输入账号" required="required" type="text"></p>
+				<p><span>账号：</span><input id="user" name="user" placeholder="输入账号 (英文/手机号)" required="required" type="text"></p>
 				<p><span>密码：</span><input id="password" name="password" placeholder="输入密码" required="required" type="password"></p>
 				<p><span>密码：</span><input id="passwords" name="passwords" placeholder="输入确认密码" required="required" type="password"></p>
 				<p>
@@ -25,54 +25,77 @@
 					<input type="radio" name="sex" id="girl" value="girl">
 				</p>
 				<p>
-					<span>部门：</span>
-					<select id="department" name="department">
-					  <option value ="o2o">o2o</option>
-					  <option value ="p2p">p2p</option>
-					</select>
+					<span>邀请码：</span>
+					<input id="department" name="name" placeholder="输入邀请码" required="required" type="text">
 				</p>
 				<p><span>姓名：</span><input id="name" name="name" placeholder="输入真实姓名" required="required" type="text"></p>
-				<div class="tips_button"><a href="/login">已有账号？直接登录</a></div>
+				<div class="tips_button"><i></i><span></span><a href="/login">已有账号？直接登录</a></div>
 				<p><input value="注册" type="button" id="regist_button"></p>
 			</form>
 		</div>
 
 		<script>
-			$("#regist_button").on("click", function(){
-				var user = $("#user").val();
-				var password = $("#password").val();
-				var passwords = $("#passwords").val();
-				var sex = $("input[type='radio']:checked").val();
-				var department = $("#department").find("option:selected").text();
-				var name = $("#name").val();
+			$(function(){
 
-				if(user.length<1){
-					return alert("请输入账号！");
-				}
-				if(passwords.length<1){
-					return alert("请输入密码！");
-				}
-				if(passwords != password){
-					return alert("密码不一致！");
-				}
-				if(name.length<1){
-					return alert("请输入真实姓名！");
-				}
-				$.post("/doregist",{
-					"user" : user,
-					"password" : password,
-					"name" : name,
-					"sex" : sex,
-					"department" : department
-				},function(result){
-					if(result == "1"){
-						//注册成功
-						alert("注册成功！将自动跳转到首页");
-						window.location = "/";
-					}else if(result == "-1"){
-						alert("用户名已被占用!");
+				$("#regist_button").on("click", function(){
+					var user = $("#user").val();
+					var password = $("#password").val();
+					var passwords = $("#passwords").val();
+					var sex = $("input[type='radio']:checked").val();
+					var department = $("#department").val();
+					var name = $("#name").val();
+					if(user.length<1){
+						return setTips("* 请输入账号！");
 					}
+					if(user.match( /^[\u4E00-\u9FA5]{1,}$/) ){
+						return setTips("* 账号只能输入英文或者数字!");
+					}
+					if(user.indexOf(" ") >=0){
+						return setTips("* 账号不能有空格等非法符号！");
+					}
+					if(passwords.length<1){
+						return setTips("* 请输入确认密码！");
+					}
+					if(department.length<1){
+						return setTips("* 请输入邀请码！");
+					}
+					if(name.length<1){
+						return setTips("* 请输入真实姓名！");
+					}
+					if(name.length<1){
+						return setTips("* 请输入真实姓名！");
+					}
+					$.post("/doregist",{
+						"user" : user,
+						"password" : password,
+						"name" : name,
+						"sex" : sex,
+						"department" : department
+					},function(result){
+						if(result == "1"){
+							//注册成功
+							setTips("");
+							$(".tips_button i").addClass("cur").text("注册成功！将自动跳转到首页");
+							setCookie("username", user ,365);
+							window.setTimeout(function(){
+								window.location = "/";
+							},1500)
+						}else if(result == "-1"){
+							return setTips("* 用户名已被占用！");
+						}else if(result == "-2"){
+							return setTips("* 邀请码无效！");
+						}
+					});
 				});
+
+				$(".registra p input").focus(function(){
+					setTips("");
+				});
+				//设置提示内容
+				function setTips(inner){
+					var tips = $(".tips_button i");
+					tips.text(inner)
+				}
 			});
 		</script>
 	</body>

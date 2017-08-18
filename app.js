@@ -35,4 +35,4 @@ app.post("/doedit",router.doEdit);//执行修改资料业务
 app.post("/dodailys",router.doDailys);//执行写日报业务
 app.post("/doalldailys",router.doAllDailys);//执行检索全部日报业务
 
-app.listen(3000);
+app.listen(8081);
